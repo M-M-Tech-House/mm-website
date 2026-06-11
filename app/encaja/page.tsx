@@ -89,12 +89,12 @@ export default function EnCajaLandingPage() {
       <header className="relative z-50 border-b border-slate-900 bg-slate-950/80 backdrop-blur-md">
         <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-full bg-white p-1.5 flex items-center justify-center shadow-lg shadow-lime-500/10">
+            <div className="w-10 h-10 flex items-center justify-center">
               <Image
                 src="/images/logo.png"
                 alt="M&M Tech House"
-                width={28}
-                height={28}
+                width={32}
+                height={32}
                 className="object-contain"
               />
             </div>
@@ -137,12 +137,12 @@ export default function EnCajaLandingPage() {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="max-w-3xl"
         >
-          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight bg-gradient-to-b from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
-            Controla tu Caja Menor. <br />
-            <span className="bg-gradient-to-r from-lime-400 to-lime-200 bg-clip-text text-transparent">
-              Simple y a tu Medida.
-            </span>
+          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight bg-gradient-to-b from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
+            EnCaja
           </h1>
+          <h2 className="text-2xl md:text-4xl font-bold bg-gradient-to-r from-lime-400 to-lime-200 bg-clip-text text-transparent mt-3">
+            Controla tu Caja Menor. Simple y a tu Medida.
+          </h2>
           <p className="mt-6 text-slate-400 text-lg md:text-xl leading-relaxed max-w-2xl mx-auto">
             Registra tus movimientos financieros de forma local, administra fotos de facturas y sincroniza de manera automática directamente en tus propias Hojas de Cálculo de Google. 100% privado.
           </p>

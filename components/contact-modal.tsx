@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { X, Send, Loader2, CheckCircle2 } from "lucide-react"
+import { X, Send, Loader2, CheckCircle2, MessageSquare, Sparkles } from "lucide-react"
 
 interface ContactModalProps {
   isOpen: boolean
@@ -49,41 +49,40 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm"
+            className="fixed inset-0 z-50 bg-slate-900/30 backdrop-blur-sm"
             onClick={onClose}
           />
 
           {/* Modal */}
           <motion.div
             key="modal"
-            initial={{ opacity: 0, scale: 0.92, y: 20 }}
+            initial={{ opacity: 0, scale: 0.94, y: 15 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.92, y: 20 }}
-            transition={{ type: "spring", damping: 28, stiffness: 300 }}
+            exit={{ opacity: 0, scale: 0.94, y: 15 }}
+            transition={{ type: "spring", damping: 25, stiffness: 280 }}
             className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none"
           >
             <div
-              className="pointer-events-auto w-full max-w-lg rounded-2xl border border-white/10 bg-[#0a1628]/90 backdrop-blur-xl shadow-[0_0_60px_rgba(0,74,153,0.3)] overflow-hidden"
+              className="pointer-events-auto w-full max-w-lg rounded-3xl border border-slate-100 bg-white/95 backdrop-blur-xl shadow-[0_20px_50px_rgba(36,88,147,0.06)] overflow-hidden animate-in fade-in zoom-in-95 duration-200"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header gradient bar */}
-              <div className="h-1 w-full bg-gradient-to-r from-primary via-accent to-cyan-400" />
+              <div className="h-1 w-full bg-gradient-to-r from-[#264164] to-[#457bb3]" />
 
               <div className="p-8">
                 {/* Close button */}
                 <div className="flex justify-between items-start mb-6">
                   <div>
-                    <h2 className="text-2xl font-bold text-foreground">
-                      Cuéntanos tu{" "}
-                      <span className="text-accent">problema</span> 🚀
+                    <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
+                      Cuéntanos tu <span className="bg-gradient-to-r from-[#264164] to-[#457bb3] bg-clip-text text-transparent">problema</span> <MessageSquare className="w-5 h-5 text-[#457bb3]" />
                     </h2>
-                    <p className="text-muted-foreground text-sm mt-1">
-                      Sin vueltas. Escribinos y te respondemos rápido.
+                    <p className="text-slate-500 text-sm mt-1">
+                      Sin rodeos. Escríbenos y te responderemos rápido.
                     </p>
                   </div>
                   <button
                     onClick={onClose}
-                    className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-white/5 transition-all"
+                    className="p-2 rounded-xl text-slate-400 hover:text-slate-900 hover:bg-slate-100 transition-all"
                     aria-label="Cerrar"
                   >
                     <X className="w-5 h-5" />
@@ -96,12 +95,12 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                     animate={{ opacity: 1, scale: 1 }}
                     className="flex flex-col items-center justify-center py-12 gap-4"
                   >
-                    <CheckCircle2 className="w-16 h-16 text-accent" />
-                    <p className="text-xl font-bold text-foreground text-center">
-                      ¡Mensaje recibido! 🎉
+                    <CheckCircle2 className="w-16 h-16 text-[#457bb3]" />
+                    <p className="text-xl font-bold text-slate-900 text-center flex items-center gap-1.5">
+                      ¡Mensaje recibido! <Sparkles className="w-5 h-5 text-[#457bb3]" />
                     </p>
-                    <p className="text-muted-foreground text-center text-sm">
-                      Ya podés dormir tranquilo, nos encargamos nosotros.
+                    <p className="text-slate-500 text-center text-sm max-w-xs">
+                      Ya puedes respirar tranquilo. Nos pondremos en contacto contigo de inmediato.
                     </p>
                   </motion.div>
                 ) : status === "error" ? (
@@ -111,11 +110,11 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                     className="flex flex-col items-center justify-center py-12 gap-4"
                   >
                     <span className="text-5xl">😬</span>
-                    <p className="text-xl font-bold text-foreground text-center">
+                    <p className="text-xl font-bold text-slate-900 text-center">
                       Algo salió mal
                     </p>
-                    <p className="text-muted-foreground text-center text-sm">
-                      No pudimos enviar tu mensaje. Intentá de nuevo en un momento.
+                    <p className="text-slate-500 text-center text-sm">
+                      No pudimos enviar tu mensaje. Inténtalo de nuevo en un momento.
                     </p>
                   </motion.div>
                 ) : (
@@ -124,7 +123,7 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                     <div>
                       <label
                         htmlFor="contact-name"
-                        className="block text-sm font-medium text-muted-foreground mb-1.5"
+                        className="block text-sm font-semibold text-slate-700 mb-1.5"
                       >
                         Tu nombre
                       </label>
@@ -136,8 +135,8 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                         onChange={(e) =>
                           setForm((f) => ({ ...f, name: e.target.value }))
                         }
-                        placeholder="Ej: Martín, el que no duerme"
-                        className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-accent/60 focus:ring-1 focus:ring-accent/30 transition-all text-sm"
+                        placeholder="Ej: Martín, gerente de operaciones"
+                        className="w-full px-4 py-3 rounded-2xl bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:bg-white focus:border-[#264164]/60 focus:ring-4 focus:ring-[#264164]/5 transition-all text-sm"
                       />
                     </div>
 
@@ -145,9 +144,9 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                     <div>
                       <label
                         htmlFor="contact-email"
-                        className="block text-sm font-medium text-muted-foreground mb-1.5"
+                        className="block text-sm font-semibold text-slate-700 mb-1.5"
                       >
-                        Tu email
+                        Tu correo electrónico
                       </label>
                       <input
                         id="contact-email"
@@ -157,8 +156,8 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                         onChange={(e) =>
                           setForm((f) => ({ ...f, email: e.target.value }))
                         }
-                        placeholder="sinsueno@outlook.com"
-                        className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-accent/60 focus:ring-1 focus:ring-accent/30 transition-all text-sm"
+                        placeholder="ejemplo@empresa.com"
+                        className="w-full px-4 py-3 rounded-2xl bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:bg-white focus:border-[#264164]/60 focus:ring-4 focus:ring-[#264164]/5 transition-all text-sm"
                       />
                     </div>
 
@@ -166,9 +165,9 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                     <div>
                       <label
                         htmlFor="contact-message"
-                        className="block text-sm font-medium text-muted-foreground mb-1.5"
+                        className="block text-sm font-semibold text-slate-700 mb-1.5"
                       >
-                        ¿Qué problema te quita el sueño?
+                        ¿Qué solución o problema quieres discutir?
                       </label>
                       <textarea
                         id="contact-message"
@@ -178,8 +177,8 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                         onChange={(e) =>
                           setForm((f) => ({ ...f, message: e.target.value }))
                         }
-                        placeholder="No puedo dormir porque las facturas me vuelven loco, mi sistema explota cada fin de mes y mi equipo ya me mira raro cuando digo 'lo arreglamos con Excel'..."
-                        className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-accent/60 focus:ring-1 focus:ring-accent/30 transition-all text-sm resize-none"
+                        placeholder="Necesitamos un sitio web que conecte con nuestro ERP, o automatizar nuestro almacén para no depender de planillas manuales..."
+                        className="w-full px-4 py-3 rounded-2xl bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:bg-white focus:border-[#264164]/60 focus:ring-4 focus:ring-[#264164]/5 transition-all text-sm resize-none"
                       />
                     </div>
 
@@ -187,19 +186,19 @@ export function ContactModal({ isOpen, onClose }: ContactModalProps) {
                     <motion.button
                       type="submit"
                       disabled={status === "sending"}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="w-full flex items-center justify-center gap-2 px-6 py-3.5 bg-gradient-to-r from-accent to-lime-400 text-accent-foreground font-bold rounded-xl transition-all duration-300 hover:shadow-[0_0_30px_rgba(140,198,63,0.4)] disabled:opacity-70 disabled:cursor-not-allowed"
+                      whileHover={{ scale: 1.01 }}
+                      whileTap={{ scale: 0.99 }}
+                      className="w-full flex items-center justify-center gap-2 px-6 py-3.5 bg-[#264164] hover:bg-[#1f3552] text-white font-bold rounded-2xl transition-all duration-300 shadow-lg shadow-[#264164]/10 disabled:opacity-70 disabled:cursor-not-allowed"
                     >
                       {status === "sending" ? (
                         <>
                           <Loader2 className="w-4 h-4 animate-spin" />
-                          Enviando...
+                          Enviando tu SOS...
                         </>
                       ) : (
                         <>
                           <Send className="w-4 h-4" />
-                          Mandar mi SOS tecnológico
+                          Enviar consulta rápida
                         </>
                       )}
                     </motion.button>

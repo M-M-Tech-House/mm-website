@@ -28,7 +28,7 @@ export default function PrivacyPolicy() {
           
           <div className="flex items-center gap-3">
             <span className="text-xs uppercase tracking-widest text-slate-400">Desarrollado por</span>
-            <div className="w-10 h-10 rounded-full bg-white p-1 flex items-center justify-center shadow-lg shadow-lime-500/10">
+            <div className="w-10 h-10 flex items-center justify-center">
               <Image
                 src="/images/logo.png"
                 alt="M&M Tech House"

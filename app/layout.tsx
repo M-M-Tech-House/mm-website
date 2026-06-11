@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: 'M&M Tech House | Tecnología Simple y a Tu Medida',
   description: 'Arquitectura de software que transforma problemas complejos en soluciones elegantes. Cloud Architecture, SaaS Development y Consultoría Estratégica.',
-  keywords: ['software', 'arquitectura', 'cloud', 'aws', 'saas', 'desarrollo', 'argentina'],
+  keywords: ['software', 'arquitectura', 'cloud', 'aws', 'saas', 'desarrollo', 'colombia'],
   authors: [{ name: 'M&M Tech House' }],
   creator: 'M&M Tech House',
   icons: {
@@ -26,12 +26,12 @@ export const metadata: Metadata = {
     title: 'M&M Tech House | Tecnología Simple y a Tu Medida',
     description: 'Arquitectura de software que transforma problemas complejos en soluciones elegantes.',
     type: 'website',
-    locale: 'es_AR',
+    locale: 'es_CO',
   },
 }
 
 export const viewport: Viewport = {
-  themeColor: '#020617',
+  themeColor: '#f8fafc',
   width: 'device-width',
   initialScale: 1,
 }

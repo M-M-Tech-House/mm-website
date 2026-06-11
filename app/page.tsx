@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { AnimatePresence } from "framer-motion"
 import { LoadingScreen } from "@/components/loading-screen"
+import { Header } from "@/components/header"
 import { HeroSection } from "@/components/hero-section"
 import { StorytellingSection } from "@/components/storytelling-section"
 import { ServicesSection } from "@/components/services-section"
@@ -20,7 +21,8 @@ export default function Home() {
       </AnimatePresence>
 
       {!isLoading && (
-        <main className="min-h-screen">
+        <main className="min-h-screen relative">
+          <Header />
           <HeroSection />
           <StorytellingSection />
           <ServicesSection />

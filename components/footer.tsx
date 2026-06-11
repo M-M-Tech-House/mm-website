@@ -2,10 +2,17 @@
 
 import { motion } from "framer-motion"
 import Image from "next/image"
-import { Linkedin, Github, Instagram } from "lucide-react"
+import { Linkedin, Github, Heart } from "lucide-react"
+
+const XIcon = (props: React.ComponentProps<"svg">) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
+    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+  </svg>
+)
 
 const socialLinks = [
   { name: "LinkedIn", icon: Linkedin, href: "https://www.linkedin.com/company/111298213/" },
+  { name: "X (Twitter)", icon: XIcon, href: "https://x.com/mmtechhouse" },
   { name: "GitHub", icon: Github, href: "https://github.com/M-M-Tech-House" },
 ]
 
@@ -17,24 +24,17 @@ const quickLinks = [
 
 export function Footer() {
   return (
-    <footer id="contacto" className="relative py-16 border-t border-border/50">
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-
-      <div className="container mx-auto px-4 relative z-10">
+    <footer id="contacto" className="relative py-16 border-t border-slate-200 bg-slate-50">
+      <div className="container mx-auto px-6 relative z-10 max-w-6xl">
         <div className="grid md:grid-cols-3 gap-12 mb-12">
           {/* Logo and tagline */}
-          <div className="flex flex-col items-center md:items-start">
+          <div className="flex flex-col items-center md:items-start text-center md:text-left">
             <motion.div
               animate={{
-                boxShadow: [
-                  "0 0 12px rgba(140, 198, 63, 0.3)",
-                  "0 0 24px rgba(140, 198, 63, 0.5)",
-                  "0 0 12px rgba(140, 198, 63, 0.3)",
-                ],
+                scale: [1, 1.05, 1],
               }}
-              transition={{ duration: 3, repeat: Infinity }}
-              className="mb-4 w-20 h-20 rounded-full bg-white p-1.5 flex items-center justify-center"
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              className="mb-4 w-16 h-16 flex items-center justify-center"
             >
               <Image
                 src="/images/logo.png"
@@ -44,21 +44,20 @@ export function Footer() {
                 className="w-full h-full object-contain"
               />
             </motion.div>
-            <p className="text-muted-foreground text-sm text-center md:text-left max-w-xs">
-              Tecnología simple y a tu medida. Construimos soluciones que
-              transforman negocios.
+            <p className="text-slate-500 text-sm max-w-xs leading-relaxed">
+              Tecnología simple y a tu medida. Construimos soluciones robustas y transparentes que transforman y automatizan tu negocio.
             </p>
           </div>
 
           {/* Quick links */}
-          <div className="text-center md:text-left">
-            <h4 className="font-bold text-lg mb-4">Enlaces Rápidos</h4>
-            <ul className="space-y-2">
+          <div className="text-center md:text-left md:pl-12">
+            <h4 className="font-extrabold text-slate-900 text-base mb-4 tracking-tight">Enlaces Rápidos</h4>
+            <ul className="space-y-3">
               {quickLinks.map((link) => (
                 <li key={link.name}>
                   <a
                     href={link.href}
-                    className="text-muted-foreground hover:text-accent transition-colors"
+                    className="text-slate-500 hover:text-[#457bb3] transition-colors text-sm font-medium"
                   >
                     {link.name}
                   </a>
@@ -68,14 +67,14 @@ export function Footer() {
           </div>
 
           {/* Social links */}
-          <div className="text-center md:text-right">
-            <h4 className="font-bold text-lg mb-4">Síguenos</h4>
-            <div className="flex justify-center md:justify-end gap-4">
+          <div className="text-center">
+            <h4 className="font-extrabold text-slate-900 text-base mb-4 tracking-tight">Síguenos</h4>
+            <div className="flex justify-center gap-3">
               {socialLinks.map((social) => (
                 <a
                   key={social.name}
                   href={social.href}
-                  className="w-10 h-10 rounded-lg bg-muted/50 flex items-center justify-center text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-all duration-300"
+                  className="w-10 h-10 rounded-xl bg-white border border-slate-200/60 flex items-center justify-center text-slate-500 hover:bg-[#264164] hover:text-white hover:border-[#264164] transition-all duration-300 shadow-sm"
                   aria-label={social.name}
                 >
                   <social.icon className="w-5 h-5" />
@@ -86,13 +85,12 @@ export function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="pt-8 border-t border-border/30 text-center">
-          <p className="text-muted-foreground text-sm">
-            © {new Date().getFullYear()} M&M Tech House. Todos los derechos
-            reservados.
+        <div className="pt-8 border-t border-slate-200/60 text-center">
+          <p className="text-slate-500 text-sm">
+            © {new Date().getFullYear()} M&M Tech House. Todos los derechos reservados.
           </p>
-          <p className="text-muted-foreground/60 text-xs mt-2">
-            Hecho con 💚 en Colombia
+          <p className="text-slate-400 text-xs mt-2 flex items-center justify-center gap-1">
+            Hecho con <Heart className="w-3.5 h-3.5 text-[#457bb3] fill-[#457bb3]" /> en Colombia
           </p>
         </div>
       </div>
