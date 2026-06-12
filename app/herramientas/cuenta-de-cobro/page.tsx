@@ -146,6 +146,16 @@ export default function CuentaDeCobroPage() {
   // Print-optimized container reference
   const printTemplateRef = useRef<HTMLDivElement>(null)
 
+  const [loginError, setLoginError] = useState<string | null>(null)
+
+  // Auto-dismiss login error after 4 seconds
+  useEffect(() => {
+    if (loginError) {
+      const timer = setTimeout(() => setLoginError(null), 4000)
+      return () => clearTimeout(timer)
+    }
+  }, [loginError])
+
   // Firebase state listener and data sync
   useEffect(() => {
     if (!auth) {
@@ -236,8 +246,32 @@ export default function CuentaDeCobroPage() {
           "5. Habilítalo, selecciona un correo de asistencia técnica para el proyecto y guarda los cambios.\n" +
           "6. Vuelve a intentar el inicio de sesión."
         )
+      } else if (err?.code === "auth/unauthorized-domain") {
+        alert(
+          "Error de dominio no autorizado en Firebase: Este dominio no está permitido para autenticación.\n\n" +
+          "Para solucionarlo:\n" +
+          "1. Ve a la Consola de Firebase (https://console.firebase.google.com/)\n" +
+          "2. Entra a tu proyecto: mmtechhouse-db157\n" +
+          "3. Ve a 'Authentication' > pestaña 'Settings' (Configuración).\n" +
+          "4. En el menú de la izquierda, selecciona 'Authorized domains' (Dominios autorizados).\n" +
+          "5. Haz clic en 'Agregar dominio' e ingresa tu dominio de Vercel (ej: tu-proyecto.vercel.app o tu dominio personalizado).\n" +
+          "6. Guarda e intenta iniciar sesión nuevamente."
+        )
+      } else if (
+        err?.code === "auth/popup-closed-by-user" ||
+        err?.code === "auth/cancelled-popup-request" ||
+        err?.message?.includes("auth/popup-closed-by-user") ||
+        err?.message?.includes("auth/cancelled-popup-request") ||
+        err?.message?.includes("popup-closed-by-user") ||
+        err?.message?.includes("cancelled-popup-request") ||
+        err?.toString()?.includes("popup-closed-by-user") ||
+        err?.toString()?.includes("cancelled-popup-request")
+      ) {
+        console.log("Detectado cierre de popup. Mostrando toast de cancelación.")
+        setLoginError("El inicio de sesión fue cancelado.")
       } else {
-        alert("Error al iniciar sesión con Google. Por favor intenta de nuevo.")
+        console.log("Error de inicio de sesión no reconocido. Mostrando toast genérico.")
+        setLoginError("No se pudo iniciar sesión con Google. Por favor intenta de nuevo.")
       }
     }
   }
@@ -582,6 +616,35 @@ export default function CuentaDeCobroPage() {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 font-sans selection:bg-[#457bb3] selection:text-white pb-12">
+      {/* Toast Error Notification */}
+      <AnimatePresence>
+        {loginError && (
+          <motion.div
+            initial={{ opacity: 0, y: -50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -50 }}
+            className="fixed top-6 left-1/2 -translate-x-1/2 z-[100] w-full max-w-sm px-4"
+          >
+            <div className="bg-white border border-slate-200/80 shadow-[0_10px_30px_rgba(38,65,100,0.08)] rounded-2xl p-4 flex items-start gap-3 backdrop-blur-md">
+              <div className="w-8 h-8 rounded-lg bg-amber-50 text-amber-500 flex items-center justify-center shrink-0">
+                <Info className="w-4.5 h-4.5" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-bold text-slate-800 leading-tight">Inicio de Sesión</p>
+                <p className="text-[11px] text-slate-500 mt-1 leading-normal">{loginError}</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setLoginError(null)}
+                className="text-slate-400 hover:text-slate-650 transition-colors p-1 cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* JSON-LD Structured Data for SEO */}
       <script
         type="application/ld+json"
