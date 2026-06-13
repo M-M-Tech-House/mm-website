@@ -323,7 +323,7 @@ export default function CuentaDeCobroPage() {
         const ctx = canvas.getContext("2d")
         if (ctx) {
           ctx.drawImage(img, 0, 0, width, height)
-          const compressedBase64 = canvas.toDataURL("image/jpeg", 0.85)
+          const compressedBase64 = canvas.toDataURL("image/png")
           setCustomLogo(compressedBase64)
           
           if (user && db) {
@@ -595,8 +595,8 @@ export default function CuentaDeCobroPage() {
   const valorEnLetras = numeroALetras(numericValue)
 
   // Pagination configuration for concepts preview and PDF
-  const itemsPerPage1 = 5
-  const itemsPerPageLater = 7
+  const itemsPerPage1 = 4
+  const itemsPerPageLater = 6
 
   const getPagesOfConceptos = (list: typeof conceptos) => {
     if (list.length <= itemsPerPage1) {
@@ -1121,6 +1121,13 @@ export default function CuentaDeCobroPage() {
                       <p className="text-[10px] text-emerald-600 font-bold mt-0.5 flex items-center gap-1">
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Límites Ampliados Activos
                       </p>
+                      <button
+                        type="button"
+                        onClick={() => setIsContactModalOpen(true)}
+                        className="text-[9px] font-bold text-[#457bb3] hover:text-[#264164] hover:underline flex items-center gap-0.5 mt-1 cursor-pointer"
+                      >
+                        ¿Necesitas más? Contáctanos (SOS)
+                      </button>
                     </div>
                   </div>
                   <button
@@ -1137,7 +1144,7 @@ export default function CuentaDeCobroPage() {
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Logo de tu Cuenta de Cobro</span>
                   {customLogo ? (
                     <div className="flex items-center gap-3 bg-slate-50 p-2.5 rounded-2xl border border-slate-200/50">
-                      <img src={customLogo} alt="Logo" className="w-12 h-12 object-contain bg-white rounded-lg border border-slate-200 shrink-0" />
+                      <img src={customLogo} alt="Logo" className="w-12 h-12 object-contain shrink-0" />
                       <div className="flex-1 min-w-0">
                         <p className="text-[11px] font-bold text-slate-700 truncate">Logo personalizado activo</p>
                         <button
@@ -1255,17 +1262,17 @@ export default function CuentaDeCobroPage() {
               {conceptPages.map((pageItems, pageIdx) => (
                 <div 
                   key={pageIdx}
-                  className="w-[380px] sm:w-[420px] h-[537px] sm:h-[593px] bg-white shadow-md rounded border border-slate-200/50 p-5 md:p-6 flex flex-col justify-between text-[11px] leading-relaxed text-slate-700 select-none shrink-0"
+                  className="w-[380px] sm:w-[420px] h-[537px] sm:h-[593px] bg-white shadow-md rounded border border-slate-200/50 pt-4 pb-3 px-4 md:pt-4 md:pb-3.5 md:px-5 flex flex-col justify-between text-[11px] leading-relaxed text-slate-700 select-none shrink-0"
                 >
                   {/* Upper Section */}
-                  <div className="space-y-3">
+                  <div className="space-y-2">
                     {/* Header info */}
                     {pageIdx === 0 ? (
-                      <div className="flex justify-between items-start border-b border-slate-200 pb-2.5">
+                      <div className="flex justify-between items-start border-b border-slate-200 pb-2">
                         <div className="flex items-center gap-2">
                           {customLogo && (
                             // eslint-disable-next-line @next/next/no-img-element
-                            <img src={customLogo} alt="Logo" className="w-10 h-10 object-contain rounded-md border border-slate-100" />
+                            <img src={customLogo} alt="Logo" className="w-10 h-10 object-contain" />
                           )}
                           <div>
                             <h4 className="font-extrabold text-slate-900 text-sm uppercase leading-tight tracking-tight">
@@ -1282,11 +1289,11 @@ export default function CuentaDeCobroPage() {
                         </div>
                       </div>
                     ) : (
-                      <div className="flex justify-between items-center border-b border-slate-200 pb-2">
+                      <div className="flex justify-between items-center border-b border-slate-200 pb-1.5">
                         <div className="flex items-center gap-1.5">
                           {customLogo && (
                             // eslint-disable-next-line @next/next/no-img-element
-                            <img src={customLogo} alt="Logo" className="w-6 h-6 object-contain rounded border border-slate-100" />
+                            <img src={customLogo} alt="Logo" className="w-6 h-6 object-contain" />
                           )}
                           <span className="font-extrabold text-slate-900 text-[10px] uppercase">
                             Cuenta de Cobro Nº {cobro.numero || "001"}
@@ -1301,14 +1308,14 @@ export default function CuentaDeCobroPage() {
                     {/* Issuer & Client Info Blocks (Only on page 1) */}
                     {pageIdx === 0 && (
                       <div className="grid grid-cols-2 gap-2">
-                        <div className="space-y-1">
+                        <div className="space-y-0.5">
                           <h5 className="font-bold text-slate-900 uppercase text-[9px] tracking-wider text-slate-400">De (Emisor)</h5>
                           <p className="font-bold text-slate-900 text-[11px] leading-tight truncate">{emisor.nombre || "(Tu Nombre)"}</p>
                           <p className="text-slate-500">NIT/CC: {emisor.nit || "(-)"}</p>
                           {emisor.telefono && <p className="text-slate-500">Tel: {emisor.telefono}</p>}
                           {emisor.email && <p className="text-slate-500 truncate">{emisor.email}</p>}
                         </div>
-                        <div className="space-y-1">
+                        <div className="space-y-0.5">
                           <h5 className="font-bold text-slate-900 uppercase text-[9px] tracking-wider text-slate-400">Para (Cliente)</h5>
                           <p className="font-bold text-slate-900 text-[11px] leading-tight truncate">{cliente.nombre || "(Nombre del Cliente)"}</p>
                           <p className="text-slate-500">NIT/CC: {cliente.nit || "(-)"}</p>
@@ -1317,8 +1324,8 @@ export default function CuentaDeCobroPage() {
                     )}
 
                     {/* Concept / Service Table */}
-                    <div className="mt-2">
-                      <div className="grid grid-cols-12 bg-slate-900 text-white font-bold text-[9px] uppercase tracking-wider py-1.5 px-2 rounded-t-md">
+                    <div className="mt-1.5">
+                      <div className="grid grid-cols-12 bg-slate-900 text-white font-bold text-[9px] uppercase tracking-wider py-1 px-2 rounded-t-md">
                         <div className="col-span-8">Concepto / Descripción</div>
                         <div className="col-span-4 text-right">Total</div>
                       </div>
@@ -1326,7 +1333,7 @@ export default function CuentaDeCobroPage() {
                         {pageItems.map((item, idx) => {
                           const originalIdx = conceptos.indexOf(item);
                           return (
-                            <div key={idx} className="grid grid-cols-12 p-2 items-center">
+                            <div key={idx} className="grid grid-cols-12 py-1.5 px-2 items-center">
                               <div className="col-span-8 text-[9.5px] break-words pr-2 leading-tight">
                                 {item.descripcion || `Ítem #${originalIdx + 1} (Sin descripción)`}
                               </div>
@@ -1341,8 +1348,8 @@ export default function CuentaDeCobroPage() {
 
                     {/* Total summary rows (Only on last page) */}
                     {pageIdx === conceptPages.length - 1 && (
-                      <div className="space-y-1.5">
-                        <div className="flex justify-between items-center bg-slate-50 p-2 rounded-md border border-slate-100">
+                      <div className="space-y-1">
+                        <div className="flex justify-between items-center bg-slate-50 p-1.5 rounded-md border border-slate-100">
                           <span className="font-extrabold text-slate-900 uppercase text-[9px]">Total a Pagar</span>
                           <span className="font-extrabold text-slate-900 text-[12px]">{formatCOP(numericValue)}</span>
                         </div>
@@ -1356,26 +1363,26 @@ export default function CuentaDeCobroPage() {
                   </div>
 
                   {/* Bottom details inside preview */}
-                  <div className="space-y-2.5 pt-2 border-t border-slate-100 mt-3">
+                  <div className="space-y-1.5 pt-1 border-t border-slate-100 mt-1.5 flex flex-col justify-between flex-1">
                     {pageIdx === conceptPages.length - 1 ? (
                       <>
                         {/* Payment account details */}
                         {(pago.banco || pago.numeroCuenta) ? (
-                          <div className="p-2.5 bg-slate-50 rounded-lg border border-slate-100/80 space-y-1">
-                            <h6 className="font-bold text-slate-900 text-[9px] uppercase tracking-wider">Favor consignar en:</h6>
-                            <p className="text-[10px] text-slate-700">
+                          <div className="p-1.5 bg-slate-50 rounded-lg border border-slate-100/80 space-y-0.5">
+                            <h6 className="font-bold text-slate-900 text-[8px] uppercase tracking-wider">Favor consignar en:</h6>
+                            <p className="text-[9.5px] text-slate-700">
                               <span className="font-semibold">{pago.banco}</span> — Cuenta de {pago.tipoCuenta} Nº <span className="font-semibold">{pago.numeroCuenta}</span>
                             </p>
                           </div>
                         ) : (
-                          <div className="p-2 bg-slate-50 rounded border border-slate-100 text-[9px] text-slate-400 italic text-center">
+                          <div className="p-1 bg-slate-50 rounded border border-slate-100 text-[8.5px] text-slate-400 italic text-center">
                             Ingresa datos de pago para mostrarlos aquí.
                           </div>
                         )}
 
                         {/* Signature mockup */}
-                        <div className="flex justify-between items-end pt-3">
-                          <div className="w-[140px] border-t border-slate-300 pt-1">
+                        <div className="flex justify-between items-end pt-1">
+                          <div className="w-[140px] border-t border-slate-300 pt-0.5">
                             <p className="font-bold text-slate-900 truncate leading-tight">{emisor.nombre || "Firma del Emisor"}</p>
                             <p className="text-[9px] text-slate-400">C.C. / NIT: {emisor.nit || "Identificación"}</p>
                           </div>
@@ -1390,6 +1397,11 @@ export default function CuentaDeCobroPage() {
                         <span>Continúa en la página siguiente...</span>
                       </div>
                     )}
+
+                    {/* Publicity footer */}
+                    <div className="text-center pt-1 border-t border-slate-100 text-[8px] text-slate-400 font-bold mt-1 shrink-0">
+                      Generado gratis en <a href="https://mmtechhouse.co" target="_blank" rel="noopener noreferrer" className="text-[#457bb3] hover:underline font-extrabold">mmtechhouse.co</a>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -1441,7 +1453,7 @@ export default function CuentaDeCobroPage() {
           {conceptPages.map((pageItems, pageIdx) => (
             <div 
               key={pageIdx}
-              className="bg-white text-slate-800 p-16 flex flex-col justify-between"
+              className="bg-white text-slate-800 pt-10 pb-6 px-12 flex flex-col justify-between"
               style={{
                 width: "800px",
                 height: "1130px", // Exact A4 ratio
@@ -1452,7 +1464,7 @@ export default function CuentaDeCobroPage() {
               }}
             >
               {/* Top content wrapper */}
-              <div className="space-y-10">
+              <div className="space-y-6">
                 
                 {/* Header info */}
                 {pageIdx === 0 ? (
@@ -1460,7 +1472,7 @@ export default function CuentaDeCobroPage() {
                     <div className="flex items-center gap-5">
                       {customLogo && (
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img src={customLogo} alt="Logo" className="w-16 h-16 object-contain rounded-lg border border-slate-100" />
+                        <img src={customLogo} alt="Logo" className="w-16 h-16 object-contain" />
                       )}
                       <div>
                         <h1 className="text-2xl font-black text-slate-900 uppercase tracking-tight">
@@ -1485,7 +1497,7 @@ export default function CuentaDeCobroPage() {
                     <div className="flex items-center gap-3">
                       {customLogo && (
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img src={customLogo} alt="Logo" className="w-8 h-8 object-contain rounded border border-slate-100" />
+                        <img src={customLogo} alt="Logo" className="w-8 h-8 object-contain" />
                       )}
                       <span className="font-black text-slate-900 text-sm uppercase">
                         Cuenta de Cobro Nº {cobro.numero || "001"}
@@ -1521,7 +1533,7 @@ export default function CuentaDeCobroPage() {
                 )}
 
                 {/* Concept table details */}
-                <div className="mt-8">
+                <div className="mt-5">
                   <div className="grid grid-cols-12 bg-slate-900 text-white font-bold text-[10px] uppercase tracking-widest py-3 px-4 rounded-t-lg">
                     <div className="col-span-9">Concepto o Descripción del Servicio</div>
                     <div className="col-span-3 text-right">Valor Total</div>
@@ -1559,42 +1571,49 @@ export default function CuentaDeCobroPage() {
               </div>
 
               {/* Bottom content wrapper */}
-              <div className="space-y-8 pt-8 border-t-2 border-slate-100">
-                {pageIdx === conceptPages.length - 1 ? (
-                  <>
-                    {/* Account Payment details */}
-                    {(pago.banco || pago.numeroCuenta) && (
-                      <div className="p-4 bg-slate-50 rounded-xl border border-slate-100 space-y-1.5">
-                        <h4 className="font-extrabold text-slate-900 text-[10px] uppercase tracking-wider">
-                          Información de Consignación:
-                        </h4>
-                        <p className="text-xs text-slate-700">
-                          Por favor realizar la transferencia bancaria a la siguiente cuenta:
-                        </p>
-                        <p className="text-xs font-semibold text-slate-900">
-                          Banco: <span className="font-black text-[#264164]">{pago.banco}</span> | Tipo: <span className="font-black text-[#264164]">{pago.tipoCuenta}</span> | Nº: <span className="font-black text-[#264164]">{pago.numeroCuenta}</span>
-                        </p>
-                      </div>
-                    )}
+              <div className="space-y-4 pt-4 border-t-2 border-slate-100 flex flex-col justify-between flex-1">
+                <div>
+                  {pageIdx === conceptPages.length - 1 ? (
+                    <>
+                      {/* Account Payment details */}
+                      {(pago.banco || pago.numeroCuenta) && (
+                        <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 space-y-1">
+                          <h4 className="font-extrabold text-slate-900 text-[10px] uppercase tracking-wider">
+                            Información de Consignación:
+                          </h4>
+                          <p className="text-xs text-slate-700">
+                            Por favor realizar la transferencia bancaria a la siguiente cuenta:
+                          </p>
+                          <p className="text-xs font-semibold text-slate-900">
+                            Banco: <span className="font-black text-[#264164]">{pago.banco}</span> | Tipo: <span className="font-black text-[#264164]">{pago.tipoCuenta}</span> | Nº: <span className="font-black text-[#264164]">{pago.numeroCuenta}</span>
+                          </p>
+                        </div>
+                      )}
 
-                    {/* Signatures and footnotes */}
-                    <div className="flex justify-between items-end pt-6">
-                      <div className="w-[260px] border-t-2 border-slate-350 pt-3">
-                        <div className="h-14" /> {/* Spacer for physical signature */}
-                        <p className="font-extrabold text-slate-900 text-sm">{emisor.nombre || "Firma del Emisor"}</p>
-                        <p className="text-xs text-slate-400 font-semibold mt-0.5">C.C. / NIT: {emisor.nit}</p>
+                      {/* Signatures and footnotes */}
+                      <div className="flex justify-between items-end pt-4">
+                        <div className="w-[260px] border-t-2 border-slate-350 pt-3">
+                          <div className="h-9" /> {/* Spacer for physical signature */}
+                          <p className="font-extrabold text-slate-900 text-sm">{emisor.nombre || "Firma del Emisor"}</p>
+                          <p className="text-xs text-slate-400 font-semibold mt-0.5">C.C. / NIT: {emisor.nit}</p>
+                        </div>
+                        <div className="text-[10px] text-slate-400 font-semibold text-right leading-relaxed max-w-[280px]">
+                          Esta cuenta de cobro se asimila a una factura de venta de conformidad con lo establecido en el Artículo 774 del Código de Comercio colombiano.
+                        </div>
                       </div>
-                      <div className="text-[10px] text-slate-400 font-semibold text-right leading-relaxed max-w-[280px]">
-                        Esta cuenta de cobro se asimila a una factura de venta de conformidad con lo establecido en el Artículo 774 del Código de Comercio colombiano.
-                      </div>
+                    </>
+                  ) : (
+                    <div className="flex justify-between items-center text-slate-400 text-xs italic">
+                      <span>Documento Soporte Nº {cobro.numero || "001"}</span>
+                      <span>Continúa en la página siguiente...</span>
                     </div>
-                  </>
-                ) : (
-                  <div className="flex justify-between items-center text-slate-400 text-xs italic">
-                    <span>Documento Soporte Nº {cobro.numero || "001"}</span>
-                    <span>Continúa en la página siguiente...</span>
-                  </div>
-                )}
+                  )}
+                </div>
+                
+                {/* Publicity footer */}
+                <div className="text-center pt-2 border-t border-slate-200 text-[10px] text-slate-400 font-bold mt-2 shrink-0">
+                  Generado gratis en <a href="https://mmtechhouse.co" target="_blank" rel="noopener noreferrer" className="text-[#264164] hover:underline font-extrabold">mmtechhouse.co</a>
+                </div>
               </div>
 
             </div>

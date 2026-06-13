@@ -19,6 +19,11 @@ const navItems = [
         name: "Cuenta de Cobro", 
         href: "/herramientas/cuenta-de-cobro", 
         description: "Generador de cuenta de cobro profesional" 
+      },
+      { 
+        name: "Dashboard OEE", 
+        href: "/herramientas/dashboard-oee", 
+        description: "Medidor y analítica de eficiencia de planta" 
       }
     ] 
   },
