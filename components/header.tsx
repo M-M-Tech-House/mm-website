@@ -24,6 +24,11 @@ const navItems = [
         name: "Dashboard OEE", 
         href: "/herramientas/dashboard-oee", 
         description: "Medidor y analítica de eficiencia de planta" 
+      },
+      { 
+        name: "Constructor IoT", 
+        href: "/herramientas/automatizacion-iot", 
+        description: "Programación visual de automatizaciones IoT" 
       }
     ] 
   },

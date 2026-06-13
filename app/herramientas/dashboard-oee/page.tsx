@@ -964,6 +964,9 @@ export default function DashboardOeePage() {
                 type="button"
                 onClick={() => {
                   setInputMode("csv")
+                  setTimeout(() => {
+                    document.getElementById("config-panel")?.scrollIntoView({ behavior: "smooth" })
+                  }, 50)
                 }}
                 className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-all cursor-pointer font-extrabold text-[11px] shrink-0"
               >
@@ -982,6 +985,9 @@ export default function DashboardOeePage() {
                 type="button"
                 onClick={() => {
                   setInputMode("csv")
+                  setTimeout(() => {
+                    document.getElementById("config-panel")?.scrollIntoView({ behavior: "smooth" })
+                  }, 50)
                 }}
                 className="px-3 py-1.5 bg-[#264164] hover:bg-[#1f3552] text-white rounded-xl transition-all cursor-pointer font-extrabold text-[11px] shrink-0"
               >
@@ -1233,7 +1239,7 @@ export default function DashboardOeePage() {
           </div>
 
           {/* 2. Carga de Datos & Configuración */}
-          <div className="bg-white border border-slate-200/80 shadow-[0_10px_30px_rgba(38,65,100,0.04)] rounded-3xl p-6 space-y-5">
+          <div id="config-panel" className="scroll-mt-24 bg-white border border-slate-200/80 shadow-[0_10px_30px_rgba(38,65,100,0.04)] rounded-3xl p-6 space-y-5">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
               <h3 className="text-sm font-extrabold text-slate-900 flex items-center gap-1.5">
                 <Settings className="w-4 h-4 text-[#457bb3]" />
