@@ -29,6 +29,16 @@ const navItems = [
         name: "Constructor IoT", 
         href: "/herramientas/automatizacion-iot", 
         description: "Programación visual de automatizaciones IoT" 
+      },
+      { 
+        name: "Políticas SG-SST", 
+        href: "/herramientas/politica-sst", 
+        description: "Generador de políticas SG-SST obligatorio" 
+      },
+      { 
+        name: "Políticas SGC ISO 9001", 
+        href: "/herramientas/politica-calidad", 
+        description: "Asistente y generador de políticas SGC ISO 9001" 
       }
     ] 
   },

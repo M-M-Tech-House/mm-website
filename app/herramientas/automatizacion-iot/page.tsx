@@ -37,7 +37,8 @@ import {
   Zap,
   Filter,
   Lightbulb,
-  Bell
+  Bell,
+  X
 } from "lucide-react"
 import { auth, db, googleProvider } from "@/lib/firebase"
 import { onAuthStateChanged, signInWithPopup, signOut, User as FirebaseUser } from "firebase/auth"
@@ -168,6 +169,15 @@ export default function AutomatizacionIotPage() {
   const [isAuthLoading, setIsAuthLoading] = useState(true)
   const [isLeadModalOpen, setIsLeadModalOpen] = useState(false)
   const [isContactModalOpen, setIsContactModalOpen] = useState(false)
+  const [loginError, setLoginError] = useState<string | null>(null)
+
+  // Auto-dismiss login error after 4 seconds
+  useEffect(() => {
+    if (loginError) {
+      const timer = setTimeout(() => setLoginError(null), 4000)
+      return () => clearTimeout(timer)
+    }
+  }, [loginError])
 
   // Lead capture form
   const [leadForm, setLeadForm] = useState({ nombre: "", email: "", empresa: "" })
@@ -305,11 +315,62 @@ export default function AutomatizacionIotPage() {
 
   // Google Login
   const handleGoogleLogin = async () => {
-    if (!auth) return
+    if (!auth) {
+      alert("Firebase no está configurado de manera correcta. Verifica tus variables de entorno.")
+      return
+    }
     try {
       await signInWithPopup(auth, googleProvider)
-    } catch (e) {
-      console.error("Google Sign-In Error", e)
+    } catch (err: any) {
+      console.error("Google Sign-In Error", err)
+      if (err?.code === "auth/configuration-not-found") {
+        alert(
+          "Error de configuración en Firebase: El proveedor de inicio de sesión con Google está desactivado en la consola de Firebase.\n\n" +
+          "Para solucionarlo:\n" +
+          "1. Ve a la Consola de Firebase (https://console.firebase.google.com/)\n" +
+          "2. Entra a tu proyecto: mmtechouse-db157\n" +
+          "3. En la barra lateral, ve a 'Authentication' > pestaña 'Sign-in method'.\n" +
+          "4. Habilítalo, selecciona un correo de asistencia técnica para el proyecto y guarda los cambios.\n" +
+          "5. Vuelve a intentar el inicio de sesión."
+        )
+      } else if (err?.code === "auth/unauthorized-domain") {
+        alert(
+          "Error de dominio no autorizado en Firebase: Este dominio no está permitido para autenticación.\n\n" +
+          "Para solucionarlo:\n" +
+          "1. Ve a la Consola de Firebase (https://console.firebase.google.com/)\n" +
+          "2. Entra a tu proyecto: mmtechouse-db157\n" +
+          "3. Ve a 'Authentication' > pestaña 'Settings' (Configuración).\n" +
+          "4. En el menú de la izquierda, selecciona 'Authorized domains' (Dominios autorizados).\n" +
+          "5. Haz clic en 'Agregar dominio' e ingresa tu dominio de Vercel (ej: tu-proyecto.vercel.app o tu dominio personalizado).\n" +
+          "6. Guarda e intenta iniciar sesión nuevamente."
+        )
+      } else if (
+        err?.code === "auth/internal-error" || 
+        err?.message?.includes("auth/internal-error") ||
+        err?.toString()?.includes("auth/internal-error")
+      ) {
+        alert(
+          "Error Interno de Firebase (auth/internal-error):\n\n" +
+          "Esto suele ocurrir por:\n" +
+          "1. No haber reiniciado el servidor de desarrollo después de crear o editar el archivo .env.local. Por favor, detén el proceso 'npm run dev' en tu terminal y vuelve a iniciarlo.\n" +
+          "2. Un bloqueador de anuncios (como Brave Shields, AdBlock o similar) que está bloqueando la comunicación con Firebase.\n" +
+          "3. Credenciales incorrectas en tu archivo .env.local.\n\n" +
+          "Por favor desactiva tu bloqueador de anuncios y reinicia tu dev server 'npm run dev'."
+        )
+      } else if (
+        err?.code === "auth/popup-closed-by-user" ||
+        err?.code === "auth/cancelled-popup-request" ||
+        err?.message?.includes("auth/popup-closed-by-user") ||
+        err?.message?.includes("auth/cancelled-popup-request") ||
+        err?.message?.includes("popup-closed-by-user") ||
+        err?.message?.includes("cancelled-popup-request") ||
+        err?.toString()?.includes("popup-closed-by-user") ||
+        err?.toString()?.includes("cancelled-popup-request")
+      ) {
+        setLoginError("El inicio de sesión fue cancelado.")
+      } else {
+        setLoginError("No se pudo iniciar sesión con Google. Por favor intenta de nuevo.")
+      }
     }
   }
 
@@ -946,6 +1007,35 @@ export default function AutomatizacionIotPage() {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-[#457bb3] selection:text-white pb-12 overflow-x-hidden">
       
+      {/* Toast Error Notification */}
+      <AnimatePresence>
+        {loginError && (
+          <motion.div
+            initial={{ opacity: 0, y: -50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -50 }}
+            className="fixed top-6 left-1/2 -translate-x-1/2 z-[100] w-full max-w-sm px-4"
+          >
+            <div className="bg-white border border-slate-200/80 shadow-[0_10px_30px_rgba(38,65,100,0.08)] rounded-2xl p-4 flex items-start gap-3 backdrop-blur-md">
+              <div className="w-8 h-8 rounded-lg bg-amber-50 text-amber-500 flex items-center justify-center shrink-0">
+                <Info className="w-4.5 h-4.5" />
+              </div>
+              <div className="flex-1 min-w-0 text-slate-800">
+                <p className="text-xs font-bold text-slate-800 leading-tight">Inicio de Sesión</p>
+                <p className="text-[11px] text-slate-500 mt-1 leading-normal">{loginError}</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setLoginError(null)}
+                className="text-slate-400 hover:text-slate-650 transition-colors p-1 cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Dynamic SVG Connection Line dashoffset Animation */}
       <style dangerouslySetInnerHTML={{ __html: `
         @keyframes iot-dash {
@@ -1069,9 +1159,15 @@ export default function AutomatizacionIotPage() {
             ) : (
               <button
                 onClick={handleGoogleLogin}
-                className="px-3.5 py-1.5 bg-[#264164] hover:bg-[#1f3552] text-white border border-[#457bb3]/30 text-xs font-extrabold rounded-xl transition-all cursor-pointer flex items-center gap-1.5"
+                className="px-3.5 py-1.5 bg-white hover:bg-slate-50 text-slate-700 font-bold rounded-full border border-slate-200 shadow-sm transition-all duration-200 flex items-center gap-1.5 cursor-pointer text-xs"
               >
-                <LogIn className="w-3.5 h-3.5 text-[#457bb3]" /> Registrarse con Google
+                <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
+                  <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+                  <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05" />
+                  <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335" />
+                </svg>
+                <span>Registrarse con Google</span>
               </button>
             )}
 
@@ -2126,9 +2222,15 @@ export default function AutomatizacionIotPage() {
                       type="button"
                       onClick={handleGoogleLogin}
                       disabled={isLeadSending}
-                      className="py-2.5 px-4 bg-slate-950 hover:bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-300 rounded-xl text-xs font-extrabold transition-all cursor-pointer flex items-center justify-center gap-1.5"
+                      className="py-2.5 px-4 bg-white hover:bg-slate-50 text-slate-700 font-bold rounded-full border border-slate-200 shadow-sm transition-all duration-200 flex items-center justify-center gap-2.5 cursor-pointer disabled:opacity-50 text-xs sm:text-sm flex-1"
                     >
-                      <LogIn className="w-4 h-4" /> Registro Rápido con Google
+                      <svg className="w-4.5 h-4.5 shrink-0" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
+                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05" />
+                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335" />
+                      </svg>
+                      <span>Registro Rápido con Google</span>
                     </button>
                   </div>
                 </form>

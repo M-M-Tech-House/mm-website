@@ -258,6 +258,19 @@ export default function CuentaDeCobroPage() {
           "6. Guarda e intenta iniciar sesión nuevamente."
         )
       } else if (
+        err?.code === "auth/internal-error" || 
+        err?.message?.includes("auth/internal-error") ||
+        err?.toString()?.includes("auth/internal-error")
+      ) {
+        alert(
+          "Error Interno de Firebase (auth/internal-error):\n\n" +
+          "Esto suele ocurrir por:\n" +
+          "1. No haber reiniciado el servidor de desarrollo después de crear o editar el archivo .env.local. Por favor, detén el proceso 'npm run dev' en tu terminal y vuelve a iniciarlo.\n" +
+          "2. Un bloqueador de anuncios (como Brave Shields, AdBlock o similar) que está bloqueando la comunicación con Firebase.\n" +
+          "3. Credenciales incorrectas en tu archivo .env.local.\n\n" +
+          "Por favor desactiva tu bloqueador de anuncios y reinicia tu dev server 'npm run dev'."
+        )
+      } else if (
         err?.code === "auth/popup-closed-by-user" ||
         err?.code === "auth/cancelled-popup-request" ||
         err?.message?.includes("auth/popup-closed-by-user") ||
@@ -1192,15 +1205,15 @@ export default function CuentaDeCobroPage() {
                 <button
                   type="button"
                   onClick={handleLogin}
-                  className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-white border border-slate-200 hover:border-slate-350 text-slate-700 font-bold rounded-xl text-xs transition-all shadow-sm cursor-pointer hover:bg-slate-50"
+                  className="w-full py-2.5 bg-white hover:bg-slate-50 text-slate-700 font-bold rounded-full border border-slate-200 shadow-sm transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer text-xs"
                 >
-                  <svg className="w-4 h-4 mr-1" viewBox="0 0 24 24">
-                    <path fill="#EA4335" d="M5.266 9.765A7.077 7.077 0 0 1 12 4.909c1.69 0 3.218.6 4.418 1.582L19.91 3C17.782 1.145 15.055 0 12 0 7.355 0 3.39 2.673 1.482 6.555l3.784 3.21z"/>
-                    <path fill="#34A853" d="M16.04 15.345c-1.077.736-2.436 1.164-4.04 1.164-3.555 0-6.573-2.418-7.645-5.69l-3.785 2.936C2.5 18.064 6.945 21 12 21c3.11 0 5.955-1.045 8.082-2.836l-4.042-2.82z"/>
-                    <path fill="#4285F4" d="M23.82 12.273c0-.818-.082-1.609-.218-2.364H12v4.518h6.636a5.69 5.69 0 0 1-2.455 3.736l4.043 2.827c2.364-2.173 3.71-5.382 3.71-8.718z"/>
-                    <path fill="#FBBC05" d="M4.355 10.818a7.03 7.03 0 0 1 0-2.364L.57 5.518a11.968 11.968 0 0 0 0 10.6l3.785-2.936z"/>
+                  <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
+                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05" />
+                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335" />
                   </svg>
-                  Iniciar Sesión con Google
+                  <span>Iniciar Sesión con Google</span>
                 </button>
               </div>
             )}
@@ -1699,9 +1712,15 @@ export default function CuentaDeCobroPage() {
                         setIsLeadModalOpen(false)
                         await handleLogin()
                       }}
-                      className="w-full sm:flex-1 px-5 py-3 bg-[#264164] hover:bg-[#1f3552] text-white font-bold rounded-xl text-sm transition-all shadow-md shadow-[#264164]/10 text-center flex items-center justify-center gap-1.5 cursor-pointer"
+                      className="w-full sm:flex-1 py-3 bg-white hover:bg-slate-50 text-slate-700 font-bold rounded-full border border-slate-200 shadow-sm transition-all duration-200 flex items-center justify-center gap-2.5 cursor-pointer text-sm"
                     >
-                      Registrarse Gratis con Google <ArrowRight className="w-4 h-4" />
+                      <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
+                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05" />
+                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335" />
+                      </svg>
+                      <span>Registrarse Gratis con Google</span>
                     </button>
                   </div>
                 </div>
