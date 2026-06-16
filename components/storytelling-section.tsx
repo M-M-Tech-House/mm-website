@@ -308,7 +308,12 @@ export function StorytellingSection() {
               No dejes que la complejidad técnica te detenga. Contáctanos hoy mismo y cuéntanos qué necesitas; nosotros nos encargamos de todo.
             </p>
             <motion.button
-              onClick={() => setIsModalOpen(true)}
+              onClick={() => {
+                if (typeof window !== "undefined" && (window as any).gtag_report_conversion) {
+                  (window as any).gtag_report_conversion();
+                }
+                setIsModalOpen(true);
+              }}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.98 }}
               className="inline-flex items-center gap-2 px-8 py-4 bg-white text-[#264164] font-extrabold text-base md:text-lg rounded-2xl shadow-lg transition-all duration-300 hover:bg-slate-100"

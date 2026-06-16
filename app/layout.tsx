@@ -58,6 +58,22 @@ export default function RootLayout({
             gtag('js', new Date());
 
             gtag('config', 'AW-18241555037');
+
+            function gtag_report_conversion(url) {
+              var callback = function () {
+                if (typeof(url) != 'undefined') {
+                  window.location = url;
+                }
+              };
+              gtag('event', 'conversion', {
+                  'send_to': 'AW-18241555037/7-1eCKaI078cEN2UoPpD',
+                  'value': 1.0,
+                  'currency': 'COP',
+                  'event_callback': callback
+              });
+              return false;
+            }
+            window.gtag_report_conversion = gtag_report_conversion;
           `}
         </Script>
       </body>

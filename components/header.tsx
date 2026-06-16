@@ -172,7 +172,12 @@ export function Header() {
           {/* Desktop Actions */}
           <div className="hidden md:flex items-center gap-4">
             <button
-              onClick={() => setIsModalOpen(true)}
+              onClick={() => {
+                if (typeof window !== "undefined" && (window as any).gtag_report_conversion) {
+                  (window as any).gtag_report_conversion();
+                }
+                setIsModalOpen(true);
+              }}
               className="px-5 py-2.5 bg-[#264164] text-white font-bold text-sm rounded-xl hover:bg-[#1f3552] hover:scale-105 transition-all duration-300 shadow-sm shadow-[#264164]/10 flex items-center gap-1.5"
             >
               Mandar SOS <Send className="w-4 h-4" />
@@ -182,7 +187,12 @@ export function Header() {
           {/* Mobile menu button */}
           <div className="flex items-center gap-3 md:hidden">
             <button
-              onClick={() => setIsModalOpen(true)}
+              onClick={() => {
+                if (typeof window !== "undefined" && (window as any).gtag_report_conversion) {
+                  (window as any).gtag_report_conversion();
+                }
+                setIsModalOpen(true);
+              }}
               className="px-3.5 py-2 bg-[#264164] text-white font-bold text-xs rounded-lg hover:bg-[#1f3552] transition-all"
             >
               Mandar SOS
