@@ -1111,7 +1111,12 @@ export default function AutomatizacionIotPage() {
                     ✓ Plan Registrado Activo. Tienes acceso ampliado para modelar esquemas completos.{" "}
                     <button
                       type="button"
-                      onClick={() => setIsContactModalOpen(true)}
+                      onClick={() => {
+                        if (typeof window !== "undefined" && (window as any).gtag_report_conversion) {
+                          (window as any).gtag_report_conversion();
+                        }
+                        setIsContactModalOpen(true);
+                      }}
                       className="text-sky-400 hover:text-sky-350 hover:underline font-extrabold cursor-pointer ml-1 inline-flex items-center gap-0.5"
                     >
                       ¿Necesitas más? Contáctanos (SOS)

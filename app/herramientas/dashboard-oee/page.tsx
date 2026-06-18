@@ -1117,7 +1117,12 @@ export default function DashboardOeePage() {
                     </span>
                     <button
                       type="button"
-                      onClick={() => setIsContactModalOpen(true)}
+                      onClick={() => {
+                        if (typeof window !== "undefined" && (window as any).gtag_report_conversion) {
+                          (window as any).gtag_report_conversion();
+                        }
+                        setIsContactModalOpen(true);
+                      }}
                       className="text-[9px] font-bold text-[#457bb3] hover:text-[#264164] hover:underline flex items-center gap-0.5 mt-1 cursor-pointer"
                     >
                       ¿Necesitas más? Contáctanos (SOS)
